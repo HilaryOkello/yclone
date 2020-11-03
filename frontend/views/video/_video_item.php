@@ -3,6 +3,7 @@
 use yii\helpers\Url;
 
 /** @var $model \common\models\Video */
+
 ?>
 
 <div class="card m-3" style="width: 14rem;">

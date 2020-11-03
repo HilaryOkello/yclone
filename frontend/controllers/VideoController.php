@@ -67,16 +67,16 @@ class VideoController extends Controller
         $videoView->created_at = time();
         $videoView->save();
 
-        /*$similarVideos = Video::find()
+        $similarVideos = Video::find()
             ->published()
             ->byKeyword($video->title)
             ->andWhere(['NOT', ['video_id' => $id]])
             ->limit(10)
-            ->all();*/
+            ->all();
 
         return $this->render('view', [
             'model' => $video,
-            //'similarVideos' => $similarVideos
+            'similarVideos' => $similarVideos
         ]);
     }
 
@@ -132,7 +132,9 @@ class VideoController extends Controller
             ->published()
             ->latest();
         if ($keyword) {
-            $query->byKeyword($keyword);
+            $query->byKeyword($keyword)
+                  ->orderBy("MATCH(title, description, tags)
+        AGAINST (:keyword)", ['keyword' => $keyword]);
         }
         $dataProvider = new ActiveDataProvider([
             'query' => $query
